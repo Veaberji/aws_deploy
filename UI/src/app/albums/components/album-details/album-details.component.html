@@ -1,0 +1,12 @@
+<div>
+  <app-main-card
+    *ngIf="navLink$ | async as navLink"
+    [imageName]="album.name"
+    [imageUrl]="album.imageUrl"
+    [title]="album.name"
+    [navLink]="navLink"
+    [text]="album.description ?? ''"
+  ></app-main-card>
+
+  <app-album-track-list [tracks]="album.tracks"></app-album-track-list>
+</div>

@@ -1,0 +1,11 @@
+<div *ngIf="paging$ | async as paging" class="page-size-selector">
+  <ul>
+    <li
+      *ngFor="let pageSize of pageSizes"
+      [class.active]="pageSize == paging.pageSize"
+      (click)="onPageSizeChanged(pageSize)"
+    >
+      <a>{{ pageSize }} </a>
+    </li>
+  </ul>
+</div>

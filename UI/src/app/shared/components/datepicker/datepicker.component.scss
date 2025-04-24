@@ -1,0 +1,14 @@
+@import '../../../../assets/scss/form';
+
+@mixin datapicker($theme) {
+  @include form($theme);
+}
+
+form,
+.submit {
+  margin: 1rem;
+}
+
+form {
+  text-align: center;
+}

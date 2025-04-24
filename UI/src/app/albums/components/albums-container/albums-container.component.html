@@ -1,0 +1,8 @@
+<div *ngIf="cardItems$ | async as cardItems; else loading">
+  <ng-container *ngIf="!isDataLoading; else loading">
+    <app-grid *ngIf="cardItems.length; else loading" [data]="cardItems"></app-grid>
+  </ng-container>
+</div>
+<ng-template #loading>
+  <app-loading></app-loading>
+</ng-template>

@@ -1,0 +1,7 @@
+<div class="app-grid">
+  <mat-grid-list [cols]="breakpoint" (window:resize)="onResize($event)" [id]="id">
+    <mat-grid-tile *ngFor="let item of data">
+      <app-card [data]="item"></app-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

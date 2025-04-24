@@ -1,0 +1,33 @@
+.app-pagination {
+  margin: 0;
+
+  display: flex;
+  flex-wrap: wrap;
+  & > * {
+    flex-shrink: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .page-container,
+  .page-sizes-container {
+    flex: 1 0 0%;
+    position: relative;
+  }
+
+  .page-container {
+    margin-left: 1rem;
+    .page-sizes {
+      position: absolute;
+      left: 0;
+    }
+  }
+
+  .page-sizes-container {
+    margin-right: 1.5rem;
+    .page-sizes {
+      position: absolute;
+      right: 0;
+    }
+  }
+}

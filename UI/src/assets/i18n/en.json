@@ -1,0 +1,93 @@
+{
+  "albumDetails": {
+    "pageTitle": "Details",
+    "created": "Created",
+    "by": "by"
+  },
+  "albumsByDate": {
+    "pageTitle": "All Albums"
+  },
+  "album": {
+    "created": "Created"
+  },
+  "artistDetails": {
+    "pageTitle": "Details",
+    "tabs": {
+      "topTracks": "Top Tracks",
+      "topAlbums": "Top Albums",
+      "similarArtists": "Similar Artists"
+    }
+  },
+  "topArtists": {
+    "pageTitle": "Top Artists"
+  },
+  "artistsReport": {
+    "pageTitle": "Generate Artists Report"
+  },
+  "track": {
+    "title": "Title",
+    "duration": "Duration",
+    "timesPlayed": "Times Played",
+    "more": "More"
+  },
+  "datepicker": {
+    "label": "Enter a date range",
+    "errors": {
+      "invalidStartDate": "Invalid start date",
+      "invalidEndDate": "Invalid end date",
+      "fromDateRequired": "From Date Required",
+      "toDateRequired": "To Date Required"
+    },
+    "submit": "Submit"
+  },
+  "footer": {
+    "copyright": "Copyright"
+  },
+  "mainCard": {
+    "seeLess": "See less",
+    "seeMore": "See more"
+  },
+  "navBar": {
+    "allAlbums": "All Albums",
+    "artistsReport": "Artists Report",
+    "menu": {
+      "changeTheme": "Change Theme",
+      "timeBasedTheme": "Time-Based Theme",
+      "language": "Language"
+    }
+  },
+  "pageSelector": {
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "reportForm": {
+    "symbols": "symbols",
+    "inputs": {
+      "search": "Search",
+      "amount": "Amount"
+    },
+    "placeholders": {
+      "max": "Max",
+      "allowedChars": "letters, numbers, spaces",
+      "between": "Between",
+      "and": "and"
+    },
+    "errors": {
+      "maxLengthIs": "Max Length is",
+      "minValueIs": "Min value is",
+      "maxValueIs": "Max value is",
+      "amountIsRequired": "Amount Is Required"
+    },
+    "buttons": {
+      "generate": "Generate",
+      "cancel": "Cancel"
+    }
+  },
+  "notFound": {
+    "pageTitle": "Not Found",
+    "firstLine": "Maybe this page moved? Got deleted? Is hiding out in quarantine?",
+    "secondLineStart": "Never existed in the first place? Let's go",
+    "home": "home",
+    "secondLineEnd": "and try from there."
+  }
+}

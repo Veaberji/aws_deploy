@@ -1,0 +1,12 @@
+<div *ngIf="tableRows$ | async as tableRows">
+  <app-table [columns]="(columns$ | async) || []" [rows]="tableRows"></app-table>
+  <div class="navigation">
+    <app-button
+      mat-raised-button
+      [title]="'track.more' | translate"
+      *ngIf="tableRows.length !== (totalItems$ | async)"
+      (click)="onLoadMore()"
+      type="submit"
+    ></app-button>
+  </div>
+</div>

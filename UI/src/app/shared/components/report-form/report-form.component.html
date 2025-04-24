@@ -1,0 +1,61 @@
+<form [formGroup]="form" (ngSubmit)="onFormSubmit()" class="form report-form">
+  <mat-form-field appearance="fill">
+    <mat-label>{{ 'reportForm.inputs.search' | translate }}</mat-label>
+    <input
+      matInput
+      type="text"
+      placeholder="{{ 'reportForm.placeholders.max' | translate }} {{ maxNameLength }}
+      {{ 'reportForm.symbols' | translate }} ({{ 'reportForm.placeholders.allowedChars' | translate }})"
+      formControlName="nameSearch"
+      id="nameSearch"
+      (ngModelChange)="onInputChanged('nameSearch', $event)"
+    />
+    <mat-error *ngIf="nameSearch?.errors?.['maxlength']" id="nameSearchMaxLengthError">
+      {{ 'reportForm.errors.maxLengthIs' | translate }} {{ maxNameLength }}
+      {{ 'reportForm.symbols' | translate }}
+    </mat-error>
+  </mat-form-field>
+  <br />
+  <mat-form-field appearance="fill">
+    <mat-label>{{ 'reportForm.inputs.amount' | translate }}</mat-label>
+    <input
+      matInput
+      type="number"
+      placeholder="{{ 'reportForm.placeholders.between' | translate }} {{ minAmount }}
+      {{ 'reportForm.placeholders.and' | translate }} {{ maxAmount }}"
+      formControlName="amount"
+      id="amount"
+      [min]="minAmount"
+      [max]="maxAmount"
+      (ngModelChange)="onInputChanged('amount', $event)"
+    />
+    <mat-error *ngIf="amount?.errors?.['required']" id="amountRequiredError">
+      {{ 'reportForm.errors.amountIsRequired' | translate }}
+    </mat-error>
+    <mat-error *ngIf="amount?.errors?.['min']" id="amountMinError">
+      {{ 'reportForm.errors.minValueIs' | translate }} {{ minAmount }}
+    </mat-error>
+    <mat-error *ngIf="amount?.errors?.['max']" id="amountMaxError">
+      {{ 'reportForm.errors.maxValueIs' | translate }} {{ maxAmount }}
+    </mat-error>
+  </mat-form-field>
+  <br />
+
+  <app-button
+    mat-raised-button
+    [title]="'reportForm.buttons.generate' | translate"
+    [disabled]="!form.valid"
+    type="submit"
+    buttonId="generateButton"
+    class="button"
+  ></app-button>
+  <app-button
+    mat-raised-button
+    [title]="'reportForm.buttons.cancel' | translate"
+    [disabled]="!nameSearch?.value && !amount?.value"
+    type="reset"
+    class="button"
+    buttonId="cancelButton"
+    (click)="onReportCancel()"
+  ></app-button>
+</form>

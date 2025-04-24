@@ -1,0 +1,34 @@
+@import '../../../../assets/scss/typography';
+
+$header-size: 1.1rem;
+$content-size: 0.9rem;
+
+@mixin table($theme) {
+  .app-table {
+    background-color: map-get($theme, 'background-color');
+    .column-header {
+      color: map-get($theme, 'text-color-accent');
+    }
+    .table-content {
+      color: map-get($theme, 'text-color');
+    }
+  }
+}
+
+.app-table {
+  width: 100%;
+  margin: 0.5rem 0;
+
+  .column-header,
+  .table-content {
+    text-align: center;
+  }
+
+  .column-header {
+    font-size: $header-size;
+  }
+
+  .table-content {
+    font-size: $content-size;
+  }
+}

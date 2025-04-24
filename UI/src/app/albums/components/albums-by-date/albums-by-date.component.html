@@ -1,0 +1,20 @@
+<app-datepicker [dates$]="dates$" (onSubmit)="onDatesSelected($event)"></app-datepicker>
+
+<app-loading *ngIf="isDataLoading"></app-loading>
+
+<div *ngIf="cardItems$ | async as cardItems">
+  <ng-container *ngIf="cardItems.length; else noAlbums">
+    <app-grid [data]="cardItems"></app-grid>
+
+    <app-pagination
+      [pageSizes]="pageSizes"
+      [paging$]="paging$"
+      [totalItems$]="totalItems$"
+      (pageChange)="onPageChange($event)"
+      (pageSizeChange)="onPageSizeChange($event)"
+    ></app-pagination>
+  </ng-container>
+  <ng-template #noAlbums>
+    <p *ngIf="!cardItems.length" class="no-data">No albums were found for the selected dates</p>
+  </ng-template>
+</div>

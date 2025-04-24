@@ -1,0 +1,41 @@
+<mat-toolbar class="toolbar">
+  <mat-toolbar-row>
+    <a routerLink="/" id="home" class="nav-link"><mat-icon>library_music</mat-icon></a>
+    <a routerLink="/albums" (click)="reload('/albums')" id="all-albums" class="nav-link">
+      {{ 'navBar.allAlbums' | translate }}
+    </a>
+    <a routerLink="/artists/report" id="artists-report" class="nav-link">{{ 'navBar.artistsReport' | translate }}</a>
+
+    <mat-icon [matMenuTriggerFor]="menu" id="settings">settings</mat-icon>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="onThemeChange()" id="changeTheme">
+        <mat-icon>highlight</mat-icon>
+        <span class="label">{{ 'navBar.menu.changeTheme' | translate }}</span>
+      </button>
+      <button *ngIf="isProduction" mat-menu-item disabled="disabled">
+        <mat-icon>access_time</mat-icon>
+        <span class="label">{{ 'navBar.menu.timeBasedTheme' | translate }}</span>
+        <mat-slide-toggle
+          (change)="onTimeBasedThemeChange($event)"
+          [checked]="timeBasedThemeUsed$ | async"
+        ></mat-slide-toggle>
+      </button>
+      <button mat-menu-item disabled="disabled" class="lang-button">
+        <mat-icon>language</mat-icon>
+        <mat-form-field
+          class="form"
+          appearance="fill"
+          *ngIf="currentLanguage$ | async as currentLanguage"
+          (click)="$event.stopPropagation()"
+        >
+          <mat-label>{{ 'navBar.menu.language' | translate }}</mat-label>
+          <mat-select [ngModel]="currentLanguage" (ngModelChange)="onLanguageChange($event)">
+            <mat-option *ngFor="let language of languages" value="{{ language.key }}">
+              {{ language.display }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </button>
+    </mat-menu>
+  </mat-toolbar-row>
+</mat-toolbar>

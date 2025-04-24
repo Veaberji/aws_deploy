@@ -1,0 +1,44 @@
+@import '../../../../assets/scss/globals';
+
+$title-size: 0.9rem;
+
+%card-transform {
+  transition: transform 0.2s;
+  transform: scale(1.05);
+}
+
+@mixin card($theme) {
+  .app-card {
+    background-color: map-get($theme, 'background-color');
+    .title {
+      color: map-get($theme, 'link-color');
+    }
+    .mat-card-content {
+      color: map-get($theme, 'text-color');
+    }
+    &:hover {
+      @extend %card-transform;
+    }
+  }
+}
+
+.app-card {
+  @extend %clickable-item;
+  margin: 0.4rem;
+  img {
+    aspect-ratio: 1.6 / 1;
+  }
+
+  .title {
+    font-size: $title-size;
+    width: 10rem;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.mat-tooltip {
+  font-size: $title-size;
+}

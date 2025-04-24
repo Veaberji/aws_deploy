@@ -1,0 +1,23 @@
+<mat-card class="app-main-card">
+  <mat-card-title class="title">
+    {{ title }} <a *ngIf="navLink" [routerLink]="navLink.link">{{ navLink.title }}</a>
+  </mat-card-title>
+  <div class="card-title-group">
+    <img src="{{ imageUrl }}" alt="{{ imageName }}" />
+  </div>
+  <mat-card-content class="content">
+    <div *ngIf="text">
+      <p *ngIf="allText">
+        {{ text }}<br />
+        <a (click)="onTextShowingChange()">{{ 'mainCard.seeLess' | translate }}</a>
+      </p>
+      <p *ngIf="!allText">
+        {{ text | slice: 0:textLimit }}
+        <span *ngIf="text.length > textLimit">
+          ...<br />
+          <a (click)="onTextShowingChange()">{{ 'mainCard.seeMore' | translate }}</a>
+        </span>
+      </p>
+    </div>
+  </mat-card-content>
+</mat-card>

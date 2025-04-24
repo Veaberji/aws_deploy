@@ -1,0 +1,11 @@
+@mixin loading($theme) {
+  .mat-spinner {
+    circle {
+      stroke: map-get($theme, 'background-color');
+    }
+  }
+}
+
+.app-loading {
+  margin: 2rem auto;
+}

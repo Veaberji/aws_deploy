@@ -1,0 +1,13 @@
+@import '../../../../assets/scss/globals';
+
+@mixin grid($theme) {
+  .app-grid {
+    box-shadow: $box-shadow map-get($theme, 'shadow-color');
+  }
+}
+
+.app-grid {
+  margin: 1rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}

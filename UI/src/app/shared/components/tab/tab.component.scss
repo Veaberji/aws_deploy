@@ -1,0 +1,19 @@
+@import '../../../../assets/scss/typography';
+
+@mixin tab($theme) {
+  .app-tab {
+    a {
+      color: map-get($theme, 'link-color');
+    }
+    .mat-ink-bar {
+      background-color: map-get($theme, 'button-color');
+    }
+  }
+}
+
+.app-tab {
+  a {
+    @extend %nav-secondary;
+    margin-left: 1.3rem;
+  }
+}

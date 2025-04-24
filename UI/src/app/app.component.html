@@ -1,0 +1,16 @@
+<div class="app-main">
+  <app-nav-bar
+    (themeChange)="onThemeChange()"
+    (timeBasedThemeChange)="onTimeBasedThemeChange($event)"
+    (languageChange)="onLanguageChange($event)"
+  ></app-nav-bar>
+
+  <div class="app-content">
+    <app-loading *ngIf="loading"></app-loading>
+    <div [@fadeAnimation]="o.isActivated ? o.activatedRoute : ''">
+      <router-outlet #o="outlet"></router-outlet>
+    </div>
+  </div>
+
+  <app-footer [title]="title"></app-footer>
+</div>

@@ -1,0 +1,93 @@
+{
+  "albumDetails": {
+    "pageTitle": "详情",
+    "created": "已创建",
+    "by": "由"
+  },
+  "albumsByDate": {
+    "pageTitle": "所有相册"
+  },
+  "album": {
+    "created": "已创建"
+  },
+  "artistDetails": {
+    "pageTitle": "详情",
+    "tabs": {
+      "topTracks": "热门曲目",
+      "topAlbums": "热门专辑",
+      "similarArtists": "相似的艺术家"
+    }
+  },
+  "topArtists": {
+    "pageTitle": "顶级艺术家"
+  },
+  "artistsReport": {
+    "pageTitle": "生成艺术家报告"
+  },
+  "track": {
+    "title": "标题",
+    "duration": "持续时间",
+    "timesPlayed": "播放次数",
+    "more": "更多的"
+  },
+  "datepicker": {
+    "label": "输入日期范围",
+    "errors": {
+      "invalidStartDate": "开始日期无效",
+      "invalidEndDate": "结束日期无效",
+      "fromDateRequired": "从日期是必需的",
+      "toDateRequired": "截止日期为必填项"
+    },
+    "submit": "提交"
+  },
+  "footer": {
+    "copyright": "著作权"
+  },
+  "mainCard": {
+    "seeLess": "少看",
+    "seeMore": "看更多"
+  },
+  "navBar": {
+    "allAlbums": "所有相册",
+    "artistsReport": "艺人报道",
+    "menu": {
+      "changeTheme": "改变主题",
+      "timeBasedTheme": "基于时间的主题",
+      "language": "语"
+    }
+  },
+  "pageSelector": {
+    "previous": "以前的",
+    "next": "下一个"
+  },
+  "reportForm": {
+    "symbols": "符号",
+    "inputs": {
+      "search": "搜索",
+      "amount": "数量"
+    },
+    "placeholders": {
+      "max": "最大限度",
+      "allowedChars": "字母、数字、空格",
+      "between": "之间",
+      "and": "和"
+    },
+    "errors": {
+      "maxLengthIs": "最大长度是",
+      "minValueIs": "最小值是",
+      "maxValueIs": "最大值是",
+      "amountIsRequired": "金额为必填项"
+    },
+    "buttons": {
+      "generate": "生成",
+      "cancel": "取消"
+    }
+  },
+  "notFound": {
+    "pageTitle": "未找到",
+    "firstLine": "也许这个页面移动了？ 被删了？ 躲在隔离区吗？",
+    "secondLineStart": "一开始就没有存在过吗？ 我们走吧",
+    "home": "主页",
+    "secondLineEnd": "并从那里尝试。"
+  }
+}

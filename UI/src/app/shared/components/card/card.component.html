@@ -1,0 +1,17 @@
+<mat-card class="app-card" (click)="goToPage()" *ngIf="data">
+  <mat-card-header>
+    <mat-card-title
+      mat-raised-button
+      matTooltip="{{ data.title }}"
+      matTooltipPosition="above"
+      matTooltipShowDelay="500"
+      class="title"
+    >
+      {{ data.title }}
+    </mat-card-title>
+  </mat-card-header>
+  <img mat-card-image src="{{ data.imageUrl }}" alt="{{ data.title }}" />
+  <mat-card-content *ngIf="data.content">
+    {{ data.content }}
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,10 @@
+<app-report-form
+  [isDataLoading]="(isDataLoading$ | async) || false"
+  [maxNameLength]="maxNameLength"
+  [minAmount]="minAmount"
+  [maxAmount]="maxAmount"
+  (onSubmit)="onReportRequested($event)"
+  (onCancel)="onReportCanceled()"
+></app-report-form>
+
+<app-loading *ngIf="isDataLoading$ | async" id="artistsReportLoading"></app-loading>

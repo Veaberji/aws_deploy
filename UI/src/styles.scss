@@ -1,0 +1,69 @@
+@import './assets/scss/components';
+@import './assets/scss/themes/dark';
+@import './assets/scss/themes/light';
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+a {
+  @extend %clickable-item;
+  text-decoration: none;
+  outline: none;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0 auto;
+}
+
+.no-data {
+  color: rgba(255, 100, 130);
+  font-size: 1.5rem;
+  text-align: center;
+  margin: 1rem;
+}
+
+.dark-theme {
+  background-color: map-get($dark-theme, 'background-secondary');
+
+  @include card($dark-theme);
+  @include datapicker($dark-theme);
+  @include footer($dark-theme);
+  @include grid($dark-theme);
+  @include loading($dark-theme);
+  @include main-card($dark-theme);
+  @include nav-bar($dark-theme);
+  @include not-found($dark-theme);
+  @include page-selector($dark-theme);
+  @include page-size-selector($dark-theme);
+  @include tab($dark-theme);
+  @include table($dark-theme);
+  @include button($dark-theme);
+  @include reportForm($dark-theme);
+}
+
+.light-theme {
+  background-color: map-get($light-theme, 'background-secondary');
+
+  @include card($light-theme);
+  @include datapicker($light-theme);
+  @include footer($light-theme);
+  @include grid($light-theme);
+  @include loading($light-theme);
+  @include main-card($light-theme);
+  @include nav-bar($light-theme);
+  @include not-found($light-theme);
+  @include page-selector($light-theme);
+  @include page-size-selector($light-theme);
+  @include tab($light-theme);
+  @include table($light-theme);
+  @include button($light-theme);
+  @include reportForm($light-theme);
+}

@@ -1,0 +1,17 @@
+<nav class="app-pagination">
+  <div class="page-container">
+    <app-page-selector
+      [paging$]="paging$"
+      [totalItems$]="totalItems$"
+      (onChange)="onPageChange($event)"
+    ></app-page-selector>
+  </div>
+  <div class="page-sizes-container">
+    <app-page-size-selector
+      [pageSizes]="pageSizes"
+      [paging$]="paging$"
+      (onChange)="onPageSizeChange($event)"
+      class="page-sizes"
+    ></app-page-size-selector>
+  </div>
+</nav>

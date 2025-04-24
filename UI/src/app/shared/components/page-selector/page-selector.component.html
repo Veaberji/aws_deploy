@@ -1,0 +1,13 @@
+<div *ngIf="pageData$ | async as data" class="page-selector">
+  <ul>
+    <li [class.disabled]="data.firstPage == data.currentPage" (click)="onPageChanged(data.currentPage - 1)">
+      <a>{{ 'pageSelector.previous' | translate }}</a>
+    </li>
+    <li *ngFor="let page of data.pages" [class.active]="page == data.currentPage" (click)="onPageChanged(page)">
+      <a *ngIf="data.pageSize" [class.disabled]="page == data.currentPage">{{ page }} </a>
+    </li>
+    <li [class.disabled]="data.lastPage == data.currentPage" (click)="onPageChanged(data.currentPage + 1)">
+      <a>{{ 'pageSelector.next' | translate }}</a>
+    </li>
+  </ul>
+</div>

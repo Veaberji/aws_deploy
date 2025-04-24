@@ -1,0 +1,46 @@
+@mixin not-found($theme) {
+  .not-found {
+    background-color: map-get($theme, 'background-color');
+    .error {
+      color: map-get($theme, 'text-color-accent');
+    }
+    .message {
+      color: map-get($theme, 'text-color');
+      a {
+        color: map-get($theme, 'link-color');
+        &:hover {
+          color: map-get($theme, 'link-hover-color');
+        }
+      }
+    }
+  }
+}
+
+.not-found {
+  border-radius: 3rem;
+  margin: 2rem;
+  height: 25rem;
+  position: relative;
+  .error {
+    font-size: 11rem;
+    text-align: center;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    top: 30%;
+    position: absolute;
+  }
+  .message {
+    text-align: center;
+    font-size: 1.6rem;
+    line-height: 1.6;
+    position: absolute;
+    left: 16%;
+    top: 55%;
+    width: 75%;
+    a {
+      font-size: 2rem;
+    }
+  }
+}

@@ -1,0 +1,60 @@
+@import '../../../../assets/scss/typography';
+
+@mixin main-card($theme) {
+  .app-main-card {
+    background-color: map-get($theme, 'background-color');
+    box-shadow: $box-shadow map-get($theme, 'shadow-color');
+    color: map-get($theme, 'text-color');
+    a {
+      color: map-get($theme, 'link-color');
+      &:hover {
+        color: map-get($theme, 'link-hover-color');
+      }
+    }
+  }
+}
+
+a {
+  font-size: 1.5rem;
+}
+
+.app-main-card {
+  margin: 1rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  min-height: fit-content;
+  .title {
+    @extend %text-title;
+    margin: 1rem 1rem 0.5rem 2rem;
+    line-height: normal;
+  }
+  .card-title-group {
+    img {
+      width: 20rem;
+      margin: 1rem 1.5rem 1.5rem 1rem;
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+    }
+    @media only screen and (min-width: 800px) {
+      & {
+        float: left;
+      }
+    }
+  }
+
+  .content {
+    @extend %text;
+    padding: 1rem 2rem;
+    &::after {
+      content: '';
+      clear: both;
+      display: table;
+    }
+    a {
+      display: inline-block;
+    }
+    p a {
+      margin-top: 0.3rem;
+    }
+  }
+}

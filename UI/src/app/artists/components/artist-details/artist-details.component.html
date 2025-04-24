@@ -1,0 +1,23 @@
+<div *ngIf="artist$ | async as artist">
+  <app-main-card [imageName]="artist.name" [imageUrl]="artist.imageUrl" [title]="artist.name" [text]="artist.biography">
+  </app-main-card>
+
+  <app-tab
+    [tabs]="[
+      {
+        navUrl: ['/artists', 'details', artist.name, supplementRoute.TopTracks],
+        title: 'artistDetails.tabs.topTracks' | translate
+      },
+      {
+        navUrl: ['/artists', 'details', artist.name, supplementRoute.TopAlbums],
+        title: 'artistDetails.tabs.topAlbums' | translate
+      },
+      {
+        navUrl: ['/artists', 'details', artist.name, supplementRoute.SimilarArtists],
+        title: 'artistDetails.tabs.similarArtists' | translate
+      }
+    ]"
+  ></app-tab>
+
+  <router-outlet></router-outlet>
+</div>

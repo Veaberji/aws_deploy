@@ -1,0 +1,28 @@
+@mixin button($theme) {
+  .app-button.mat-button-disabled {
+    /*prevent disabled button from disappearing*/
+    background-color: map-get($theme, 'button-disabled-color');
+    color: map-get($theme, 'link-color');
+    &:hover {
+      color: map-get($theme, 'link-color');
+    }
+  }
+
+  .app-button {
+    background-color: map-get($theme, 'button-color');
+    color: map-get($theme, 'link-color');
+    &:hover {
+      color: map-get($theme, 'link-hover-color');
+    }
+  }
+}
+
+button {
+  min-width: 64px;
+  line-height: 36px;
+  padding: 0 16px;
+  border-radius: 4px;
+  overflow: visible;
+  transform: translate3d(0, 0, 0);
+  transition: background 400ms cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+}

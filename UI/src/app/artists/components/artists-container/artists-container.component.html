@@ -1,0 +1,16 @@
+<div *ngIf="cardItems$ | async as cardItems; else loading">
+  <ng-container *ngIf="!isDataLoading; else loading">
+    <app-grid *ngIf="cardItems.length; else loading" [data]="cardItems" [id]="'topArtistsList'"></app-grid>
+
+    <app-pagination
+      [totalItems$]="totalItems$"
+      [pageSizes]="pageSizes"
+      [paging$]="paging$"
+      (pageChange)="onPageChange($event)"
+      (pageSizeChange)="onPageSizeChange($event)"
+    ></app-pagination>
+  </ng-container>
+</div>
+<ng-template #loading>
+  <app-loading></app-loading>
+</ng-template>

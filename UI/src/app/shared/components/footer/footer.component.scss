@@ -1,0 +1,26 @@
+@import '../../../../assets/scss/typography';
+
+@mixin footer($theme) {
+  .footer-toolbar {
+    background-color: map-get($theme, 'background-color');
+    span {
+      color: map-get($theme, 'text-color');
+    }
+    a {
+      color: map-get($theme, 'link-color');
+      &:hover {
+        color: map-get($theme, 'link-hover-color');
+      }
+    }
+  }
+}
+
+.footer-toolbar {
+  position: absolute;
+  bottom: 0;
+  span {
+    @extend %nav-secondary;
+    flex: 1 1 auto;
+    text-align: center;
+  }
+}

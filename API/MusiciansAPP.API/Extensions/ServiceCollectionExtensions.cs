@@ -49,9 +49,15 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddDbServices(this IServiceCollection services, IConfiguration config)
     {
+#if DEBUG
         services.AddDbContext<AppDbContext>(
             options => options.UseSqlServer(
                 config.GetConnectionString("DefaultConnection")));
+#else
+        services.AddDbContext<AppDbContext>(options =>
+            options.UseSqlServer(Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")));
+#endif
+
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;

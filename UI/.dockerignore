@@ -1,0 +1,16 @@
+.env
+.git
+.gitignore
+.vs
+.vscode
+*.log
+*/node_modules
+node_modules/
+.angular/
+coverage/
+*/dist
+*/.git
+*/.idea
+*/.vs
+*/.vscode
+**/.toolstarget

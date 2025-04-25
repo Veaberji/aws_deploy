@@ -365,5 +365,5 @@ FodyWeavers.xsd
 # SpecFlow - auto-generated Features
 *.feature.cs
 
-
-appsettings.Production.json
+# Secrets
+.env

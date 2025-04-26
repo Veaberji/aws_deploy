@@ -2,7 +2,7 @@ services:
   ui:
     image: ${{ secrets.DOCKERHUB_USERNAME }}/musicians-ui:latest
     ports:
-      - 4200:80
+      - 80:80
     environment:
       CONFIG: production
     depends_on:

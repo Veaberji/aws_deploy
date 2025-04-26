@@ -1,6 +1,6 @@
 services:
   ui:
-    image: ${{ secrets.DOCKERHUB_USERNAME }}/musicians-ui:latest
+    image: ${{ DOCKERHUB_USERNAME }}/musicians-ui:latest
     ports:
       - 80:80
     environment:
@@ -9,7 +9,7 @@ services:
       - api
 
   api:
-    image: ${{ secrets.DOCKERHUB_USERNAME }}/musicians-api:latest
+    image: ${{ DOCKERHUB_USERNAME }}/musicians-api:latest
     env_file:
       - .env
     environment:

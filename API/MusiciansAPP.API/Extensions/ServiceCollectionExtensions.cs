@@ -51,11 +51,11 @@ public static class ServiceCollectionExtensions
     {
 #if DEBUG
         services.AddDbContext<AppDbContext>(
-            options => options.UseSqlServer(
+            options => options.UseNpgsql(
                 config.GetConnectionString("DefaultConnection")));
 #else
         services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer(Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")));
+            options.UseNpgsql(Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")));
 #endif
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();

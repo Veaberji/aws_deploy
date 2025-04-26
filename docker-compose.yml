@@ -21,23 +21,24 @@ services:
     environment:
       LASTFM_KEY: ${API_KEY}
       DB_PASSWORD: ${DB_PASSWORD}
-      DB_CONNECTION_STRING: "Server=db;Database=MusiciansDb;User=sa;Password=${DB_PASSWORD};"
+      DB_CONNECTION_STRING: "Server=db;Database=MusiciansDb;Port=5432;User Id=postgres;Password=${DB_PASSWORD};"
     ports:
       - 7093:7093
     depends_on:
       - db
 
   db:
-    image: mcr.microsoft.com/mssql/server:2019-latest
+    image: postgres:14
     env_file:
       - .env
     environment:
-      ACCEPT_EULA: Y
-      MSSQL_SA_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: MusiciansDb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - 1433:1433
+      - 5432:5432
     volumes:
-      - musicians-db:/var/opt/mssql
+      - musicians-db:/var/lib/postgresql/data
 
 volumes:
   musicians-db:

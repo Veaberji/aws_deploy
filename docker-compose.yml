@@ -1,21 +1,15 @@
 services:
   ui:
-    image: musicians-ui
-    build:
-      context: ./UI
-      args:
-        CONFIG: production
+    image: ${{ secrets.DOCKERHUB_USERNAME }}/musicians-ui:latest
     ports:
       - 4200:80
+    environment:
+      CONFIG: production
     depends_on:
       - api
 
   api:
-    image: musicians-api
-    build:
-      context: ./API
-      args:
-        CONFIG: Release
+    image: ${{ secrets.DOCKERHUB_USERNAME }}/musicians-api:latest
     env_file:
       - .env
     environment:

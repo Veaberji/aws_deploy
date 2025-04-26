@@ -24,24 +24,24 @@ jobs:
 
       - name: Create app folder on EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} "mkdir -p /app"
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} "mkdir -p /home/ec2-user/app"
 
       - name: Upload docker-compose.yml
         run: |
-          scp -o StrictHostKeyChecking=no docker-compose.yml ec2-user@${{ secrets.EC2_PUBLIC_IP }}:/app/docker-compose.yml
+          scp -o StrictHostKeyChecking=no docker-compose.yml ec2-user@${{ secrets.EC2_PUBLIC_IP }}:/home/ec2-user/app/docker-compose.yml
 
-      - name: Create .env directly on EC2
+      - name: Create .env on EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} << EOF
-            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" > /app/.env
-            echo "API_KEY=${{ secrets.API_KEY }}" >> /app/.env
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" > /home/ec2-user/app/.env
+            echo "API_KEY=${{ secrets.API_KEY }}" >> /home/ec2-user/app/.env
           EOF
 
       - name: Deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
-            cd /app
-            docker-compose pull
+            cd /home/ec2-user/app
+            docker-compose pull || true
             docker-compose down
             docker-compose up -d
             docker ps

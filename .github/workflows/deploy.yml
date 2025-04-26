@@ -10,6 +10,7 @@ on:
 
 jobs:
   deploy:
+    name: Deploy published images to i
     runs-on: ubuntu-latest
 
     steps:

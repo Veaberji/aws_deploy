@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,8 +23,9 @@ public static class ServiceCollectionExtensions
         services.AddCors(options =>
             options.AddDefaultPolicy(policy =>
             {
-                policy.SetIsOriginAllowed(uri =>
-                        new Uri(uri).Host == AppConfigs.Host)
+
+                policy
+                    .SetIsOriginAllowed(uri => AppConfigs.Hosts.Contains(new Uri(uri).Host))
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .WithExposedHeaders("Content-Disposition");

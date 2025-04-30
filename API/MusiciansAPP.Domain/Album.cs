@@ -27,9 +27,9 @@ public class Album : Entity
     [Range(AlbumConstraints.PlayCountMinValue, int.MaxValue)]
     public int? PlayCount { get; set; }
 
+    [Column(TypeName = "date")]
     public DateOnly DateCreated { get; set; }
 
-    [Column(TypeName = "ntext")]
     public string Description { get; set; }
 
     public Artist Artist { get; set; }

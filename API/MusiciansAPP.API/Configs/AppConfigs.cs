@@ -2,7 +2,7 @@
 
 public class AppConfigs
 {
-    public static string Host { get; set; }
+    public static string[] Hosts { get; set; }
 
     public static int DefaultPageSize { get; set; }
 

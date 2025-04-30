@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-ui:
-    name: Build UI container
+    name: Build UI
     runs-on: ubuntu-latest
 
     steps:
@@ -39,7 +39,7 @@ jobs:
           docker rm ui-container
 
   build-api:
-    name: Build API container
+    name: Build API
     runs-on: ubuntu-latest
 
     steps:
@@ -71,5 +71,5 @@ jobs:
       - name: Stop containers
         if: always()
         run: |
-          docker stop api-container ui-container
-          docker rm api-container ui-container
+          docker stop api-container
+          docker rm api-container

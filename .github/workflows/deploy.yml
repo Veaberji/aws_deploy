@@ -17,7 +17,9 @@ on:
         required: true
         type: string
         default: 'latest'
-
+  pull_request:
+    branches:
+      - main
 jobs:
   deploy:
     name: Deploy published images to EC2

@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   push-images:
@@ -23,6 +24,12 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build and push API image
         uses: docker/build-push-action@v5
         with:
@@ -30,7 +37,9 @@ jobs:
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/musicians-api:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/musicians-api:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/musicians-api:${{ steps.tag_version.outputs.new_tag }}
+          labels: |
+            app=musicians-api
 
       - name: Build and push UI image
         uses: docker/build-push-action@v5
@@ -39,7 +48,9 @@ jobs:
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/musicians-ui:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/musicians-ui:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/musicians-ui:${{ steps.tag_version.outputs.new_tag }}
+          labels: |
+            app=musicians-ui
 
   deploy:
     name: Deploy published images to EC2
@@ -59,7 +70,14 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} "mkdir -p /home/ec2-user/app"
 
-      - name: Upload docker-compose.yml
+      - name: Backup docker-compose.yml
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} "
+            if [ -f /home/ec2-user/app/docker-compose.yml ]; then
+              cp /home/ec2-user/app/docker-compose.yml /home/ec2-user/app/docker-compose.yml.bak
+            fi
+          "
+      - name: Upload new docker-compose.yml
         run: |
           scp -o StrictHostKeyChecking=no docker-compose.yml ec2-user@${{ secrets.EC2_PUBLIC_IP }}:/home/ec2-user/app/docker-compose.yml
 
@@ -71,12 +89,36 @@ jobs:
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> /home/ec2-user/app/.env
           EOF
 
+      - name: Clean up old API and UI images
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+            docker image prune -a --filter "label=app=musicians-api" --filter "until=24h" -f || true
+            docker image prune -a --filter "label=app=musicians-ui" --filter "until=24h" -f || true
+          EOF
+
       - name: Deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+            set -e
             cd /home/ec2-user/app
+
+            echo "Pulling new images"
             docker-compose pull || true
-            docker-compose down
-            docker-compose up -d
+
+            echo "Stopping old containers"
+            docker-compose down || true
+
+            echo "Starting new containers"
+            if ! docker-compose up -d; then
+              echo "Deployment failed! Rolling back"
+              if [ -f docker-compose.yml.bak ]; then
+                cp docker-compose.yml.bak docker-compose.yml
+                docker-compose up -d || true
+              else
+                echo "No backup for docker-compose found. Rollback failed."
+                exit 1
+              fi
+            fi
+
             docker ps
           EOF

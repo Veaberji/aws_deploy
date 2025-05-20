@@ -367,6 +367,7 @@ FodyWeavers.xsd
 
 # Secrets
 .env
+environment.prod.ts
 
 # Terraform
 .terraform/

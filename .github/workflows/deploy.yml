@@ -34,11 +34,11 @@ jobs:
 
       - name: Create app folder on EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} "mkdir -p /home/ec2-user/app"
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ github.event.workflow_run.outputs.ec2_ip }} "mkdir -p /home/ec2-user/app"
 
       - name: Backup docker-compose.yml
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} "
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ github.event.workflow_run.outputs.ec2_ip }} "
             if [ -f /home/ec2-user/app/docker-compose.yml ]; then
               cp /home/ec2-user/app/docker-compose.yml /home/ec2-user/app/docker-compose.yml.bak
             fi
@@ -46,19 +46,25 @@ jobs:
 
       - name: Upload new docker-compose.yml
         run: |
-          scp -o StrictHostKeyChecking=no docker-compose.yml ec2-user@${{ secrets.EC2_PUBLIC_IP }}:/home/ec2-user/app/docker-compose.yml
+          scp -o StrictHostKeyChecking=no docker-compose.yml ec2-user@${{ github.event.workflow_run.outputs.ec2_ip }}:/home/ec2-user/app/docker-compose.yml
 
       - name: Create .env on EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ github.event.workflow_run.outputs.ec2_ip }} << EOF
             echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" > /home/ec2-user/app/.env
             echo "API_KEY=${{ secrets.API_KEY }}" >> /home/ec2-user/app/.env
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> /home/ec2-user/app/.env
+            echo "APP_IP=${{ github.event.workflow_run.outputs.ec2_ip }}" >> /home/ec2-user/app/.env
+            echo "APP_DNS=${{ github.event.workflow_run.outputs.ec2_dns }}" >> /home/ec2-user/app/.env
           EOF
+
+      - name: Check Docker
+        run: |
+          cat scripts/check-docker.sh | ssh -o StrictHostKeyChecking=no ec2-user@${{ github.event.workflow_run.outputs.ec2_ip }} 'bash -s'
 
       - name: Clean up old API and UI images
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ github.event.workflow_run.outputs.ec2_ip }} << 'EOF'
             docker image prune -a --filter "label=app=musicians-api" --filter "until=24h" -f || true
             docker image prune -a --filter "label=app=musicians-ui" --filter "until=24h" -f || true
           EOF
@@ -82,7 +88,7 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ github.event.workflow_run.outputs.ec2_ip }} << 'EOF'
             set -e
             cd /home/ec2-user/app
 

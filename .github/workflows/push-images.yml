@@ -1,14 +1,19 @@
 name: Push App to DockerHub
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ['Provision AWS Infrastructure']
+    types:
+      - completed
 
 jobs:
   push-images:
     name: Build & Push Docker Images
     runs-on: ubuntu-latest
+
+    outputs:
+      ec2_ip: ${{ steps.export.outputs.ec2_ip }}
+      ec2_dns: ${{ steps.export.outputs.ec2_dns }}
 
     steps:
       - name: Checkout code
@@ -28,6 +33,15 @@ jobs:
         uses: mathieudutour/github-tag-action@v6.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Terraform outputs
+        id: export
+        run: |
+          echo "ec2_ip=${{ github.event.workflow_run.outputs.ec2_ip }}" >> $GITHUB_OUTPUT
+          echo "ec2_dns=${{ github.event.workflow_run.outputs.ec2_dns }}" >> $GITHUB_OUTPUT
+
+      - name: Generate UI environment.prod.ts
+        run: ./scripts/generate-ui-env.sh ${{ steps.export.outputs.ec2_ip }}
 
       - name: Build and push API image
         uses: docker/build-push-action@v5

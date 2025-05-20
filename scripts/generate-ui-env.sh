@@ -13,8 +13,6 @@ fi
 
 echo "Generating environment.prod.ts with EC2 IP: $EC2_IP"
 
-mkdir -p "$(dirname "$ENV_FILE")"
-
 cat > $ENV_FILE <<EOL
 import { NgxLoggerLevel } from 'ngx-logger';
 

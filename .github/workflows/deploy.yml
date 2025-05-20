@@ -1,0 +1,108 @@
+name: Deploy full MusiciansAPP
+
+on:
+  workflow_run:
+    workflows: ['Push App to DockerHub']
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      api_version:
+        description: 'API Image Version'
+        required: true
+        type: string
+        default: 'latest'
+      ui_version:
+        description: 'UI Image Version'
+        required: true
+        type: string
+        default: 'latest'
+
+jobs:
+  deploy:
+    name: Deploy published images to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.9.1
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Create app folder on EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} "mkdir -p /home/ec2-user/app"
+
+      - name: Backup docker-compose.yml
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} "
+            if [ -f /home/ec2-user/app/docker-compose.yml ]; then
+              cp /home/ec2-user/app/docker-compose.yml /home/ec2-user/app/docker-compose.yml.bak
+            fi
+          "
+
+      - name: Upload new docker-compose.yml
+        run: |
+          scp -o StrictHostKeyChecking=no docker-compose.yml ec2-user@${{ secrets.EC2_PUBLIC_IP }}:/home/ec2-user/app/docker-compose.yml
+
+      - name: Create .env on EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" > /home/ec2-user/app/.env
+            echo "API_KEY=${{ secrets.API_KEY }}" >> /home/ec2-user/app/.env
+            echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> /home/ec2-user/app/.env
+          EOF
+
+      - name: Clean up old API and UI images
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+            docker image prune -a --filter "label=app=musicians-api" --filter "until=24h" -f || true
+            docker image prune -a --filter "label=app=musicians-ui" --filter "until=24h" -f || true
+          EOF
+
+      - name: Pull the selected versions of the Docker images
+        run: |
+          api_version="${{ github.event.inputs.api_version || 'latest' }}"
+          ui_version="${{ github.event.inputs.ui_version || 'latest' }}"
+
+          echo "Pulling API image version $api_version from DockerHub"
+          if ! docker pull ${{ secrets.DOCKERHUB_USERNAME }}/musicians-api:$api_version; then
+            echo "Error: API image version $api_version not found in DockerHub"
+            exit 1
+          fi
+
+          echo "Pulling UI image version $ui_version from DockerHub"
+          if ! docker pull ${{ secrets.DOCKERHUB_USERNAME }}/musicians-ui:$ui_version; then
+            echo "Error: UI image version $ui_version not found in DockerHub"
+            exit 1
+          fi
+
+      - name: Deploy to EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+            set -e
+            cd /home/ec2-user/app
+
+            echo "Pulling new images"
+            docker-compose pull || true
+
+            echo "Stopping old containers"
+            docker-compose down || true
+
+            echo "Starting new containers"
+            if ! docker-compose up -d; then
+              echo "Deployment failed! Rolling back"
+              if [ -f docker-compose.yml.bak ]; then
+                cp docker-compose.yml.bak docker-compose.yml
+                docker-compose up -d || true
+              else
+                echo "No backup for docker-compose found. Rollback failed."
+                exit 1
+              fi
+            fi
+
+            docker ps
+          EOF

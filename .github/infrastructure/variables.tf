@@ -15,3 +15,27 @@ variable "instance_type" {
   type        = string
   default     = "t2.micro"
 }
+
+variable "volume_size" {
+  description = "Size in GB for root volume"
+  type        = number
+  default     = 8
+}
+
+variable "ssh_ingress_cidr" {
+  description = "Ips allowed to SSH into EC2"
+  type        = list(string)
+  default     = ["0.0.0.0/0"] # I'll leave it for now, as github has lots of ips for runners
+}
+
+variable "api_port" {
+  description = "Port used by app API"
+  type        = number
+  default     = 7093
+}
+
+variable "backend_bucket_name" {
+  description = "S3 backend bucket name"
+  type        = string
+  default     = "musicians-app-tf-state"
+}

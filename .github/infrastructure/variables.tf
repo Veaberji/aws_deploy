@@ -39,3 +39,9 @@ variable "backend_bucket_name" {
   type        = string
   default     = "musicians-app-tf-state"
 }
+
+variable "notification_emails" {
+  description = "List of email addresses for SNS notifications"
+  type        = list(string)
+  default     = ["ec.app.testing@gmail.com"]
+}

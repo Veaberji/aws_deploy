@@ -50,3 +50,16 @@ module "compute" {
   security_groups = [module.network.sg_name]
   user_data       = file("${path.module}/user_data.sh")
 }
+
+module "monitoring" {
+  source        = "./modules/monitoring"
+  app_name      = local.app_name
+  instance_id   = module.compute.instance_id
+  sns_topic_arn = module.notifications.sns_topic_arn
+}
+
+module "notifications" {
+  source              = "./modules/notifications"
+  app_name            = local.app_name
+  notification_emails = var.notification_emails
+}

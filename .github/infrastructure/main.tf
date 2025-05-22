@@ -48,7 +48,7 @@ module "compute" {
   volume_size     = var.volume_size
   instance_type   = var.instance_type
   security_groups = [module.network.sg_name]
-  user_data       = file("${path.module}/user_data.sh")
+  user_data       = file("${path.module}/scripts/user_data.sh")
 }
 
 module "monitoring" {

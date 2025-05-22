@@ -367,3 +367,9 @@ FodyWeavers.xsd
 
 # Secrets
 .env
+
+# Terraform
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+errored.tfstate

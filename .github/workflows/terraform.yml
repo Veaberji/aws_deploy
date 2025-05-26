@@ -29,12 +29,15 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+        working-directory: ./infrastructure
 
       - name: Terraform Plan
         run: terraform plan -out=tfplan
+        working-directory: ./infrastructure
 
       - name: Show Terraform Plan
         run: terraform show -no-color tfplan
+        working-directory: ./infrastructure
 
   terraform-apply:
     name: Terraform Apply
@@ -54,15 +57,18 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+        working-directory: ./infrastructure
 
       - name: Apply Terraform
         run: terraform apply -auto-approve tfplan
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        working-directory: ./infrastructure
 
       - name: Export Terraform Outputs
         id: export
         run: |
           echo "ec2_ip=$(terraform output -raw instance_public_ip)" >> $GITHUB_OUTPUT
           echo "ec2_dns=$(terraform output -raw instance_public_dns)" >> $GITHUB_OUTPUT
+        working-directory: ./infrastructure

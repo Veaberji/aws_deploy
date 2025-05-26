@@ -23,7 +23,6 @@ variable "security_groups" {
   type        = list(string)
 }
 
-
 variable "user_data" {
   description = "User data to be run on EC2 launch"
   type        = string

@@ -20,12 +20,18 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddAppCors(this IServiceCollection services)
     {
+#if DEBUG
+        var hosts = AppConfigs.Hosts;
+#else
+        var ip = Environment.GetEnvironmentVariable("APP_IP");
+        var dns = Environment.GetEnvironmentVariable("APP_DNS");
+        var hosts = new string[] { ip, dns };
+#endif
         services.AddCors(options =>
             options.AddDefaultPolicy(policy =>
             {
-
                 policy
-                    .SetIsOriginAllowed(uri => AppConfigs.Hosts.Contains(new Uri(uri).Host))
+                    .SetIsOriginAllowed(uri => hosts.Contains(new Uri(uri).Host))
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .WithExposedHeaders("Content-Disposition");

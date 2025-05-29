@@ -16,6 +16,8 @@ services:
       LASTFM_KEY: ${API_KEY}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_CONNECTION_STRING: "Server=db;Database=MusiciansDb;Port=5432;User Id=postgres;Password=${DB_PASSWORD};"
+      APP_IP: ${APP_IP}
+      APP_DNS: ${APP_DNS}
     ports:
       - 7093:7093
     depends_on:

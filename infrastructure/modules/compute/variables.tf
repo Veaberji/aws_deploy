@@ -18,6 +18,11 @@ variable "instance_type" {
   type        = string
 }
 
+variable "key_name" {
+  description = "Key pair name to use with EC2 instance"
+  type        = string
+}
+
 variable "security_groups" {
   description = "Security groups for EC2"
   type        = list(string)

@@ -45,3 +45,9 @@ variable "notification_emails" {
   type        = list(string)
   default     = ["ec.app.testing@gmail.com"]
 }
+
+variable "key_name" {
+  description = "Key pair name to use with EC2 instance"
+  type        = string
+  default     = "edu_kp"
+}

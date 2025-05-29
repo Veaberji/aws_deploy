@@ -45,9 +45,10 @@ module "compute" {
 
   app_name        = local.app_name
   ami             = var.ami
+  key_name        = var.key_name
+  security_groups = [module.network.sg_name]
   volume_size     = var.volume_size
   instance_type   = var.instance_type
-  security_groups = [module.network.sg_name]
   user_data       = file("${path.module}/scripts/user_data.sh")
 }
 

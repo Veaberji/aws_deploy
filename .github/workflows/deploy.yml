@@ -27,20 +27,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download Terraform Outputs
-        uses: actions/download-artifact@v4
-        with:
-          name: terraform-outputs
-          path: ./infrastructure
-
-      - name: Load Terraform Outputs
-        id: load_outputs
-        run: |
-          ec2_ip=$(grep ec2_ip ./infrastructure/outputs.env | cut -d '=' -f2)
-          ec2_dns=$(grep ec2_dns ./infrastructure/outputs.env | cut -d '=' -f2)
-          echo "ec2_ip=${ec2_ip}" >> $GITHUB_OUTPUT
-          echo "ec2_dns=${ec2_dns}" >> $GITHUB_OUTPUT
-
       - name: Set up SSH key
         uses: webfactory/ssh-agent@v0.9.1
         with:
@@ -48,11 +34,11 @@ jobs:
 
       - name: Create app folder on EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@${{ steps.load_outputs.outputs.ec2_ip }} "mkdir -p /home/ec2-user/app"
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ vars.EC2_IP }} "mkdir -p /home/ec2-user/app"
 
       - name: Backup docker-compose.yml
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@${{ steps.load_outputs.outputs.ec2_ip }} "
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ vars.EC2_IP }} "
             if [ -f /home/ec2-user/app/docker-compose.yml ]; then
               cp /home/ec2-user/app/docker-compose.yml /home/ec2-user/app/docker-compose.yml.bak
             fi
@@ -60,51 +46,51 @@ jobs:
 
       - name: Upload new docker-compose.yml
         run: |
-          scp -o StrictHostKeyChecking=no docker-compose.yml ec2-user@${{ steps.load_outputs.outputs.ec2_ip }}:/home/ec2-user/app/docker-compose.yml
+          scp -o StrictHostKeyChecking=no docker-compose.yml ec2-user@${{ vars.EC2_IP }}:/home/ec2-user/app/docker-compose.yml
 
       - name: Create .env on EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@${{ steps.load_outputs.outputs.ec2_ip }} << EOF
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ vars.EC2_IP }} << EOF
             echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" > /home/ec2-user/app/.env
             echo "API_KEY=${{ secrets.API_KEY }}" >> /home/ec2-user/app/.env
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> /home/ec2-user/app/.env
-            echo "APP_IP=${{ steps.load_outputs.outputs.ec2_ip }}" >> /home/ec2-user/app/.env
-            echo "APP_DNS=${{ steps.load_outputs.outputs.ec2_dns }}" >> /home/ec2-user/app/.env
+            echo "APP_IP=${{ vars.EC2_IP }}" >> /home/ec2-user/app/.env
+            echo "APP_DNS=${{ vars.EC2_DNS }}" >> /home/ec2-user/app/.env
           EOF
 
       - name: Check Docker
         run: |
-          cat scripts/check-docker.sh | ssh -o StrictHostKeyChecking=no ec2-user@${{ steps.load_outputs.outputs.ec2_ip }} 'bash -s'
+          cat scripts/check-docker.sh | ssh -o StrictHostKeyChecking=no ec2-user@${{ vars.EC2_IP }} 'bash -s'
 
       - name: Clean up old API and UI images
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@${{ steps.load_outputs.outputs.ec2_ip }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ vars.EC2_IP }} << 'EOF'
             docker image prune -a --filter "label=app=musicians-api" --filter "until=24h" -f || true
             docker image prune -a --filter "label=app=musicians-ui" --filter "until=24h" -f || true
           EOF
 
       - name: Pull the selected versions of the Docker images
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@${{ steps.load_outputs.outputs.ec2_ip }} << 'EOF'
-           api_version="${{ github.event.inputs.api_version || 'latest' }}"
-           ui_version="${{ github.event.inputs.ui_version || 'latest' }}"
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ vars.EC2_IP }} << EOF
+            api_version="${{ github.event.inputs.api_version || 'latest' }}"
+            ui_version="${{ github.event.inputs.ui_version || 'latest' }}"
 
-           echo "Pulling API image version $api_version from DockerHub"
-           if ! docker pull ${{ secrets.DOCKERHUB_USERNAME }}/musicians-api:$api_version; then
-             echo "Error: API image version $api_version not found in DockerHub"
-             exit 1
-           fi
+            echo "Pulling API image version \$api_version from DockerHub"
+            if ! docker pull ${{ secrets.DOCKERHUB_USERNAME }}/musicians-api:\$api_version; then
+              echo "Error: API image version \$api_version not found in DockerHub"
+              exit 1
+            fi
 
-           echo "Pulling UI image version $ui_version from DockerHub"
-           if ! docker pull ${{ secrets.DOCKERHUB_USERNAME }}/musicians-ui:$ui_version; then
-             echo "Error: UI image version $ui_version not found in DockerHub"
-             exit 1
-           fi
+            echo "Pulling UI image version \$ui_version from DockerHub"
+            if ! docker pull ${{ secrets.DOCKERHUB_USERNAME }}/musicians-ui:\$ui_version; then
+              echo "Error: UI image version \$ui_version not found in DockerHub"
+              exit 1
+            fi
           EOF
 
       - name: Deploy to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@${{ steps.load_outputs.outputs.ec2_ip }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ vars.EC2_IP }} << 'EOF'
             set -e
             cd /home/ec2-user/app
 

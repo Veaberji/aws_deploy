@@ -31,7 +31,9 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate UI environment.prod.ts
-        run: ./scripts/generate-ui-env.sh ${{ vars.EC2_IP }}
+        run: |
+          chmod +x ./scripts/generate-ui-env.sh
+          ./scripts/generate-ui-env.sh ${{ vars.EC2_IP }}
 
       - name: Build and push API image
         uses: docker/build-push-action@v5

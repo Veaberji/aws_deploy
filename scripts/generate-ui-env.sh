@@ -2,7 +2,7 @@
 set -e
 
 EC2_IP=$1
-ENV_FILE=../UI/src/environments/environment.prod.ts
+ENV_FILE=UI/src/environments/environment.prod.ts
 LOGGER_LEVEL=ERROR
 TITLE=MusiciansAPP
 
